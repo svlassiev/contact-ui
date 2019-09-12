@@ -1,0 +1,47 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hiking
+  labels:
+    app: hiking
+spec:
+  type: NodePort
+  selector:
+    app: hiking
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hiking
+  labels:
+    app: hiking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hiking
+  template:
+    metadata:
+      labels:
+        app: hiking
+    spec:
+      imagePullSecrets:
+        - name: svlassiev-dockerhub
+      containers:
+        - name: hiking
+          image: svlassiev/hiking:19.9.12
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10M
+            limits:
+              cpu: 100m
+              memory: 2560M

@@ -18,14 +18,16 @@
         >
 
             <v-flex>
-              <v-layout>
-                <v-btn @click="onChevronClick(index)" color="black" text class="mb-4">
-                  <div class="headline">
-                    {{ folder.name }}
-                    <v-icon color="black" right v-if="open[index]">mdi-chevron-up</v-icon>
-                    <v-icon color="black" right v-else>mdi-chevron-down</v-icon>
-                  </div>
-                </v-btn>
+              <v-layout align-left>
+                <v-row justify="start">
+                  <v-btn @click="onChevronClick(index)" color="black" text class="mb-4">
+                    <div class="subtitle-2 text-left">
+                      {{ folder.name }}
+                      <v-icon color="black" right large v-if="open[index]">mdi-chevron-up</v-icon>
+                      <v-icon color="black" right large v-else>mdi-chevron-down</v-icon>
+                    </div>
+                  </v-btn>
+                </v-row>
               </v-layout>
             </v-flex>
             <v-slide-y-transition>
@@ -53,7 +55,7 @@ export default {
   name: 'App',
   data () {
     return {
-      open: Array.from(Array(11), x => false)
+      open: Array.from(Array(11), () => false)
     }
   },
   computed: {
