@@ -8,42 +8,19 @@
 
     <v-content>
 
-      <v-timeline dense clipped align-top>
+      <v-timeline dense clipped align-top :class="{'timeline': $vuetify.breakpoint.xs}">
         <v-timeline-item
-            v-for="(folder, index) in foldersWithImages"
-            :key="folder.id"
-            class="mb-4"
+            v-for="imagesList in foldersWithImages"
+            :key="imagesList.listId"
+            ref="folder"
+            :class="mb-4"
             color="pink"
             fill-dot
+            :small="$vuetify.breakpoint.xsOnly"
         >
 
-            <v-flex>
-              <v-layout align-left>
-                <v-row justify="start">
-                  <v-btn @click="onChevronClick(index)" color="black" text class="mb-4">
-                    <div class="subtitle-2 text-left">
-                      {{ folder.name }}
-                      <v-icon color="black" right large v-if="open[index]">mdi-chevron-up</v-icon>
-                      <v-icon color="black" right large v-else>mdi-chevron-down</v-icon>
-                    </div>
-                  </v-btn>
-                </v-row>
-              </v-layout>
-            </v-flex>
-            <v-slide-y-transition>
-              <v-flex v-if="open[index]">
+          <image-list-timeline-items :imagesList="imagesList"/>
 
-                <v-timeline-item
-                    v-for="image in folder.images"
-                    :key="image.id"
-                    class="mb-4"
-                    color="pink"
-                    hide-dot
-                >
-                  <v-img :src="getSource(folder.folderId, image)" :lazy-src="getLazySource(folder.folderId, image)" max-height="800" contain/>
-                </v-timeline-item>
-              </v-flex>
-            </v-slide-y-transition>
         </v-timeline-item>
       </v-timeline>
     </v-content>
@@ -51,27 +28,24 @@
 </template>
 
 <script>
+import ImageListTimelineItems from "./components/ImageListTimelineItems";
 export default {
   name: 'App',
-  data () {
-    return {
-      open: Array.from(Array(11), () => false)
-    }
-  },
+  components: {ImageListTimelineItems},
   computed: {
     folders () {
       return Array.of(
-        { name: 'Байкал 2004', folderId: 'Baikal', count: 127 },
-        { name: 'Четвёртый традиционный майский', folderId: '4thmay', count: 79 },
-        { name: 'Четвёртый традиционный осенний', folderId: '4trados', count: 26 },
-        { name: 'Пятый традиционный майский', folderId: '5tradmay', count: 44 },
-        { name: 'Шестой традиционный майский', folderId: '6tradmay', count: 55 },
-        { name: 'Шестой традиционный осенний', folderId: '6trados', count: 41 },
-        { name: 'Седьмой традиционный майский', folderId: '7tradmay', count: 12 },
-        { name: 'Седьмой традиционный осенний', folderId: '7trados', count: 41 },
-        { name: 'Хибины 2009', folderId: 'Hibiny9', count: 138 },
-        { name: 'Поход за полярный круг', folderId: 'ArcticCircleBeyound', count: 99 },
-        { name: 'Байдарочный поход 2011', folderId: 'canoeing11', count: 98 }
+        { name: 'Байкал 2004', listId: 'Baikal', count: 127 },
+        { name: 'Четвёртый традиционный майский', listId: '4thmay', count: 79 },
+        { name: 'Четвёртый традиционный осенний', listId: '4trados', count: 26 },
+        { name: 'Пятый традиционный майский', listId: '5tradmay', count: 44 },
+        { name: 'Шестой традиционный майский', listId: '6tradmay', count: 55 },
+        { name: 'Шестой традиционный осенний', listId: '6trados', count: 41 },
+        { name: 'Седьмой традиционный майский', listId: '7tradmay', count: 12 },
+        { name: 'Седьмой традиционный осенний', listId: '7trados', count: 41 },
+        { name: 'Хибины 2009', listId: 'Hibiny9', count: 138 },
+        { name: 'Поход за полярный круг', listId: 'ArcticCircleBeyound', count: 99 },
+        { name: 'Байдарочный поход 2011', listId: 'canoeing11', count: 98 }
         )
     },
     foldersWithImages () {
@@ -85,31 +59,17 @@ export default {
         return (index + 1)
       }
 
-      function getImages (folder) {
-        return Array.from(Array(folder.count), (x, index) => ({ id: getImageId(index), description: index, time: new Date() }))
+      function getImages (imageList) {
+        return Array.from(Array(imageList.count), (x, index) => ({ imageId: getImageId(index), description: index, time: new Date() }))
       }
 
-      return Array.from(this.folders, (folder) => ({ ...folder, images: getImages(folder) }))
-    }
-  },
-  methods: {
-    getSource (folderId, image) {
-      return 'https://storage.cloud.google.com/colorless-days-children/' + folderId + '/Picture' + image.id + '.jpg'
-    },
-    getLazySource (folderId, image) {
-      return 'https://storage.cloud.google.com/colorless-days-children/' + folderId + '/1_Picture' + image.id + '.jpg'
-    },
-    onChevronClick (folderIndex) {
-      this.open[folderIndex] = !this.open[folderIndex]
-      this.$forceUpdate()
+      return Array.from(this.folders, (list) => ({ ...list, images: getImages(list) }))
     }
   }
 }
 </script>
 <style scoped lang="scss">
-  .image-container {
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 500ms ease-in;
+  .timeline {
+    margin-left: -28px;
   }
 </style>
