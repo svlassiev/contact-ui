@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import App from './App.vue'
+import App from '../App.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
@@ -18,6 +18,6 @@ const router = new Router({
       redirect: { name: 'app' }
     }
   ]
-})
+});
 
 export default router

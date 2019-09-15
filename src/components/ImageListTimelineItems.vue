@@ -22,8 +22,7 @@
                         color="pink"
                         hide-dot
                 >
-                    <v-img :src="getSource(imagesList.listId, image)" :lazy-src="getLazySource(imagesList.listId, image)"
-                           max-height="800" contain class="image-timeline-item"/>
+                    <v-img :src="getSource(imagesList.listId, image)" :lazy-src="getLazySource(imagesList.listId, image)" max-height="800" contain class="image-timeline-item"/>
                 </v-timeline-item>
             </v-flex>
         </v-slide-y-transition>
