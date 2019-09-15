@@ -1,4 +1,11 @@
-# contact-ui
+# hiking-ui
+
+## Updating
+```shell script
+$ docker build -t svlassiev/hiking:<version> .
+$ docker push svlassiev/hiking:<version>
+$ kubectl apply -f k8s/hiking.yml
+```
 
 ## Project setup
 ```
