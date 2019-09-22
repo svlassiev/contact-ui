@@ -5,6 +5,7 @@ import router from './plugins/router'
 import store from './store/index'
 
 Vue.config.productionTip = false;
+Vue.use(require('vue-moment'));
 
 new Vue({
     vuetify,
