@@ -1,8 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app dense hide-on-scroll flat>
+    <v-app-bar app dense hide-on-scroll flat ref="header" :class="{'toolbar-mobile': $vuetify.breakpoint.xs}">
+      <v-app-bar-nav-icon @click="$vuetify.goTo(0, {duration: 1000})" :class="{'ml-2': $vuetify.breakpoint.smAndUp}">
+        <v-icon>mdi-transfer-up</v-icon>
+      </v-app-bar-nav-icon>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Поход</span>
+        Поход
       </v-toolbar-title>
     </v-app-bar>
 
@@ -44,5 +47,8 @@ export default {
 <style scoped lang="scss">
   .timeline-mobile {
     margin-left: -28px;
+  }
+  .toolbar-mobile {
+    margin-left: -8px;
   }
 </style>

@@ -4,6 +4,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './plugins/router'
 import store from './store/index'
+import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false;
 Vue.use(require('vue-moment'));

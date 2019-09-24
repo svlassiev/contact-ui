@@ -5,7 +5,7 @@ import axios from 'axios'
 
 Vue.use(Vuex);
 
-const apiUrl = 'http://serg.vlassiev.info/hiking-api/';
+const apiUrl = 'http://serg.vlassiev.info/hiking-api/'
 
 export default new Vuex.Store({
     state: {

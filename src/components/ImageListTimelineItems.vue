@@ -32,7 +32,7 @@
                     >
                         <v-img :src="image.location" :lazy-src="image.thumbnail" max-height="800" contain class="image-timeline-item"/>
                         <div class="subtitle-2">{{ image.timestamp | moment("LT") }}</div>
-                </v-timeline-item>
+                    </v-timeline-item>
                 </v-timeline-item>
             </v-flex>
         </v-slide-y-transition>
@@ -41,7 +41,7 @@
 
 <script>
 import axios from 'axios'
-const apiUrl = 'http://serg.vlassiev.info/hiking-api/';
+const apiUrl = 'http://serg.vlassiev.info/hiking-api/'
 
 export default {
     name: "ImageListTimelineItems",
