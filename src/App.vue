@@ -11,19 +11,14 @@
 
     <v-content>
       <v-timeline dense clipped align-top :class="{'timeline-mobile': $vuetify.breakpoint.xs}">
-        <v-timeline-item
+        <div
             v-for="imagesList in foldersWithImages"
             :key="imagesList.listId"
             ref="folder"
             class="mb-4"
-            color="pink"
-            fill-dot
-            :small="$vuetify.breakpoint.xsOnly"
         >
-
           <image-list-timeline-items :imagesList="imagesList" />
-
-        </v-timeline-item>
+        </div>
       </v-timeline>
     </v-content>
   </v-app>

@@ -1,39 +1,43 @@
 <template>
     <div>
-        <v-layout align-left>
-            <v-row justify="start">
-                <v-btn @click="onChevronClick" color="black" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
-                    <div class="subtitle-2 text-left">
-                        {{ imagesList.name }}
-                        <v-icon color="black" right large v-if="open">mdi-chevron-up</v-icon>
-                        <v-icon color="black" right large v-else>mdi-chevron-down</v-icon>
-                    </div>
-                </v-btn>
-            </v-row>
-        </v-layout>
+        <v-timeline-item fill-dot color="pink" :small="$vuetify.breakpoint.xsOnly">
+            <v-layout align-left>
+                <v-row justify="start">
+                    <v-btn @click="onChevronClick" color="black" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
+                        <div class="subtitle-2 text-left">
+                            {{ imagesList.name }}
+                            <v-icon color="black" right large v-if="open">mdi-chevron-up</v-icon>
+                            <v-icon color="black" right large v-else>mdi-chevron-down</v-icon>
+                        </div>
+                    </v-btn>
+                </v-row>
+            </v-layout>
+        </v-timeline-item>
         <v-slide-y-transition>
             <v-flex v-if="open" class="mb-4">
-                <v-timeline-item
-                        v-for="imagesWithinDate in imagesByDate"
-                        :key="imagesWithinDate.date"
-                        ref="date"
-                        class="mb-4"
-                        hide-dot
-                        :small="$vuetify.breakpoint.xsOnly"
+                <div
+                    v-for="imagesWithinDate in imagesByDate"
+                    :key="imagesWithinDate.date"
+                    ref="date"
+                    class="mb-4"
+                    :small="$vuetify.breakpoint.xsOnly"
                 >
-                    <div class="title">{{ imagesWithinDate.date }}</div>
-                    <v-timeline-item
-                            v-for="image in imagesWithinDate.images"
-                            :key="image.imageId"
-                            ref="image"
-                            class="mb-4"
-                            color="pink"
-                            hide-dot
-                    >
-                        <v-img :src="image.location" :lazy-src="image.thumbnail" max-height="800" contain class="image-timeline-item"/>
-                        <div class="subtitle-2">{{ image.timestamp | moment("LT") }}</div>
+                    <v-timeline-item hide-dot>
+                        <div class="subtitle-1">{{ imagesWithinDate.date }}</div>
                     </v-timeline-item>
-                </v-timeline-item>
+                    <div
+                        v-for="image in imagesWithinDate.images"
+                        :key="image.imageId"
+                        ref="image"
+                        class="mb-4">
+                    <v-timeline-item hide-dot class="mb-0 pb-0">
+                        <v-img :src="image.location" :lazy-src="image.thumbnail" max-height="800" contain class="image-timeline-item"/>
+                    </v-timeline-item>
+                    <v-timeline-item hide-dot class="mt-0 pt-0">
+                        <div class="text-sm-start font-weight-thin">{{ image.timestamp | moment("LT") }}</div>
+                    </v-timeline-item>
+                    </div>
+                </div>
             </v-flex>
         </v-slide-y-transition>
     </div>
@@ -95,6 +99,6 @@ export default {
 </script>
 <style scoped lang="scss">
     .image-timeline-item {
-        margin-left: -80px;
+        margin-left: -28px;
     }
 </style>
