@@ -54,15 +54,15 @@ export default {
             type: Object,
             required: true
         },
-        collapsed: {
-            type: Boolean,
+        expanded: {
+            type: Number,
             required: true
         }
     },
     data () {
         return {
-            open: !this.collapsed,
-            loading: !this.collapsed,
+            open: this.expanded !== 0,
+            loading: this.expanded !== 0,
             images: []
         }
     },
@@ -86,8 +86,8 @@ export default {
         }
     },
     watch: {
-        collapsed(newValue) {
-            if (newValue) {
+        expanded(newValue) {
+            if (newValue === 0) {
                 this.open = false
             }
         }
@@ -108,7 +108,9 @@ export default {
             }
             this.open = !this.open
             if (this.open) {
-                this.$emit('expand')
+                this.$emit('expand', this.$refs.chevronButton)
+            } else {
+                this.$emit('collapse', this.$refs.chevronButton)
             }
         },
         dotColor () {

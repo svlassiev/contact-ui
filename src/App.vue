@@ -8,7 +8,7 @@
         Поход
       </v-toolbar-title>
       <v-spacer/>
-      <v-app-bar-nav-icon @click="onCollapseClick" v-if="!collapsed">
+      <v-app-bar-nav-icon @click="onCollapseClick" v-if="expanded">
         <v-icon>mdi-arrow-collapse-vertical</v-icon>
       </v-app-bar-nav-icon>
     </v-app-bar>
@@ -21,7 +21,7 @@
             ref="folder"
             class="mb-4"
         >
-          <image-list-timeline-items :imagesList="imagesList" :collapsed="collapsed" @expand="onExpand" />
+          <image-list-timeline-items :imagesList="imagesList" :expanded="expanded" @expand="onExpand" @collapse="onCollapse" />
         </div>
       </v-timeline>
     </v-content>
@@ -35,7 +35,7 @@ export default {
   components: {ImageListTimelineItems},
   data () {
     return {
-      collapsed: true
+      expanded: 0
     }
   },
   mounted () {
@@ -47,11 +47,16 @@ export default {
     }
   },
   methods: {
-    onExpand () {
-      this.collapsed = false
+    onExpand (ref) {
+      this.expanded += 1
+      this.$vuetify.goTo(ref, {duration: 200})
+    },
+    onCollapse (ref) {
+      this.expanded -= 1
+      this.$vuetify.goTo(ref, {duration: 200})
     },
     onCollapseClick () {
-      this.collapsed = true
+      this.expanded = 0
     }
   }
 }
