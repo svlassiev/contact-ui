@@ -7,6 +7,10 @@
       <v-toolbar-title class="headline text-uppercase">
         Поход
       </v-toolbar-title>
+      <v-spacer/>
+      <v-app-bar-nav-icon @click="onCollapseClick" v-if="!collapsed">
+        <v-icon>mdi-arrow-collapse-vertical</v-icon>
+      </v-app-bar-nav-icon>
     </v-app-bar>
 
     <v-content>
@@ -17,7 +21,7 @@
             ref="folder"
             class="mb-4"
         >
-          <image-list-timeline-items :imagesList="imagesList" />
+          <image-list-timeline-items :imagesList="imagesList" :collapsed="collapsed" @expand="onExpand" />
         </div>
       </v-timeline>
     </v-content>
@@ -29,12 +33,25 @@ import ImageListTimelineItems from "./components/ImageListTimelineItems";
 export default {
   name: 'App',
   components: {ImageListTimelineItems},
+  data () {
+    return {
+      collapsed: true
+    }
+  },
   mounted () {
     this.$store.commit('getFolders')
   },
   computed: {
     foldersWithImages () {
       return this.$store.state.folders
+    }
+  },
+  methods: {
+    onExpand () {
+      this.collapsed = false
+    },
+    onCollapseClick () {
+      this.collapsed = true
     }
   }
 }
