@@ -2,7 +2,7 @@
     <div>
         <v-timeline-item fill-dot :color="dotColor()" :small="$vuetify.breakpoint.xsOnly">
             <v-layout align-left>
-                <div justify="start">
+                <div>
                     <v-btn @click="onChevronClick" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
                         <div class="subtitle-2 text-start">
                             {{ imagesList.name }}
@@ -31,7 +31,7 @@
                         ref="image"
                         class="mb-4">
                     <v-timeline-item hide-dot class="mb-0 pb-0">
-                        <v-img :src="image.location" :lazy-src="image.thumbnail" max-height="800" contain class="image-timeline-item"/>
+                        <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 400 : 800" contain class="image-timeline-item"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
                         <div class="caption">{{ image.timestamp | moment("LT") }}</div>
@@ -103,7 +103,7 @@ export default {
                 .finally(() => this.loading = false)
         },
         onChevronClick() {
-            if (this.images.length == 0 && !this.loading && !this.open) {
+            if (this.images.length === 0 && !this.loading && !this.open) {
                 this.loadImages()
             }
             this.open = !this.open
