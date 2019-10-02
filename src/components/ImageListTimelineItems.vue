@@ -6,15 +6,16 @@
                     <v-btn @click="onChevronClick" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
                         <div class="subtitle-2 text-start">
                             {{ imagesList.name }}
-                            <v-icon v-if="open" color="black" right large>mdi-chevron-up</v-icon>
+                            <v-icon v-if="active" color="black" right large>mdi-chevron-up</v-icon>
                             <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
                         </div>
                     </v-btn>
                 </div>
             </v-layout>
         </v-timeline-item>
-        <v-slide-y-transition>
-            <v-flex v-if="open" class="mb-4">
+        <v-slide-y-transition v-if="active">
+            <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"/>
+            <v-flex v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
                 <div
                     v-for="imagesWithinDate in imagesByDate"
                     :key="imagesWithinDate.date"
@@ -31,7 +32,7 @@
                         ref="image"
                         class="mb-4">
                     <v-timeline-item hide-dot class="mb-0 pb-0">
-                        <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 400 : 800" contain class="image-timeline-item"/>
+                        <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 400 : 800" contain class="ml-n7"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
                         <div class="caption">{{ image.timestamp | moment("LT") }}</div>
@@ -45,35 +46,45 @@
 
 <script>
 import axios from 'axios'
+import { ObserveVisibility } from 'vue-observe-visibility'
 const apiUrl = 'http://serg.vlassiev.info/hiking-api/'
 
 export default {
     name: "ImageListTimelineItems",
+    directives: {
+        ObserveVisibility
+    },
     props: {
         imagesList: {
             type: Object,
             required: true
         },
-        expanded: {
-            type: Number,
+        active: {
+            type: Boolean,
+            required: true
+        },
+        toggle: {
+            type: Function,
             required: true
         }
     },
     data () {
         return {
-            open: this.expanded !== 0,
-            loading: this.expanded !== 0,
+            loading: false,
             images: []
         }
+    },
+    mounted () {
+        this.toggle()
     },
     computed: {
         colors () {
             return ["#00FFFF", "#8A2BE2", "#A52A2A", "#7FFF00", "#D2691E", "#FF7F50", "#DC143C", "#00FFFF", "#00008B", "#006400", "#8B008B", "#FF8C00", "#FF1493", "#B22222", "#228B22", "#008000", "#4B0082", "#CD5C5C", "#800000", "#0000CD", "#6B8E23", "#FFA500", "#FF4500", "#800080", "#FF0000", "#F4A460", "#FF6347", "#EE82EE", "#FFFF00", "#9ACD32"]
         },
-        dateToImage() {
+        dateToImage () {
             return this.images.map(image => ({ date: this.$moment(image.timestamp).format("LL"), image: image}))
         },
-        imagesByDate() {
+        imagesByDate () {
             let imagesByDate = []
             let images = this.dateToImage
             while (images.length > 0) {
@@ -83,13 +94,9 @@ export default {
                 imagesByDate.push({date: indexDate, images: chunk.map(pair => pair.image)})
             }
             return imagesByDate
-        }
-    },
-    watch: {
-        expanded(newValue) {
-            if (newValue === 0) {
-                this.open = false
-            }
+        },
+        noImages () {
+            return this.images.length === 0
         }
     },
     methods: {
@@ -103,24 +110,25 @@ export default {
                 .finally(() => this.loading = false)
         },
         onChevronClick() {
-            if (this.images.length === 0 && !this.loading && !this.open) {
+            if (!this.active && this.noImages) {
                 this.loadImages()
             }
-            this.open = !this.open
-            if (this.open) {
-                this.$emit('expand', this.$refs.chevronButton)
-            } else {
-                this.$emit('collapse', this.$refs.chevronButton)
-            }
+            this.toggle()
+            this.$vuetify.goTo(this.$refs.chevronButton, {duration: 200})
         },
         dotColor () {
             return this.colors[Math.floor(Math.random() * this.colors.length)]
+        },
+        onListVisibilityChange (visible) {
+            if (visible && this.noImages) {
+                this.loadImages()
+            }
         }
     }
 }
 </script>
 <style scoped lang="scss">
-    .image-timeline-item {
-        margin-left: -28px;
+    .loading-placeholder {
+        height: 2048px;
     }
 </style>

@@ -14,13 +14,15 @@ export default new Vuex.Store({
     },
     mutations: {
         getFolders(state) {
-            this.loading = true;
+            state.loading = true;
             axios
                 .get(apiUrl + 'folders')
                 .then(response => {
                     state.folders = response.data
                 })
-                .finally(() => this.loading = false)
+                .finally(() => {
+                    state.loading = false
+                })
         }
     }
 })

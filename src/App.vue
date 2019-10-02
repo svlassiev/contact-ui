@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app dense hide-on-scroll flat ref="header" :class="{'toolbar-mobile': $vuetify.breakpoint.xs}">
+    <v-app-bar app dense hide-on-scroll flat ref="header" :class="{'ml-n2': $vuetify.breakpoint.xs}">
       <v-app-bar-nav-icon @click="$vuetify.goTo(0, {duration: 1000})" :class="{'ml-2': $vuetify.breakpoint.smAndUp}">
         <v-icon>mdi-transfer-up</v-icon>
       </v-app-bar-nav-icon>
@@ -8,21 +8,28 @@
         Поход
       </v-toolbar-title>
       <v-spacer/>
-      <v-app-bar-nav-icon @click="onCollapseClick" v-if="expanded">
+      <v-app-bar-nav-icon @click="onCollapseClick" v-if="activeLists">
         <v-icon>mdi-arrow-collapse-vertical</v-icon>
       </v-app-bar-nav-icon>
     </v-app-bar>
 
     <v-content>
-      <v-timeline dense clipped align-top :class="{'timeline-mobile': $vuetify.breakpoint.xs}">
-        <div
-            v-for="imagesList in foldersWithImages"
-            :key="imagesList.listId"
-            ref="folder"
-            class="mb-4"
-        >
-          <image-list-timeline-items :imagesList="imagesList" :expanded="expanded" @expand="onExpand" @collapse="onCollapse" />
-        </div>
+      <v-layout v-if="loading" justify-center class="ma-8">
+        <v-progress-circular indeterminate color="blue" size="70"/>
+      </v-layout>
+      <v-timeline v-else dense clipped align-top :class="{'ml-n7': $vuetify.breakpoint.xs}">
+        <v-item-group multiple :value="activeLists">
+          <div
+              v-for="imagesList in foldersWithImages"
+              :key="imagesList.listId"
+              ref="folder"
+              class="mb-4"
+          >
+            <v-item v-slot:default="{ active, toggle }" :value="imagesList.listId">
+              <image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle" />
+            </v-item>
+          </div>
+        </v-item-group>
       </v-timeline>
     </v-content>
   </v-app>
@@ -35,37 +42,24 @@ export default {
   components: {ImageListTimelineItems},
   data () {
     return {
-      expanded: 0
+      activeLists: []
     }
   },
   mounted () {
     this.$store.commit('getFolders')
   },
   computed: {
+    loading () {
+      return this.$store.state.loading
+    },
     foldersWithImages () {
       return this.$store.state.folders
     }
   },
   methods: {
-    onExpand (ref) {
-      this.expanded += 1
-      this.$vuetify.goTo(ref, {duration: 200})
-    },
-    onCollapse (ref) {
-      this.expanded -= 1
-      this.$vuetify.goTo(ref, {duration: 200})
-    },
     onCollapseClick () {
-      this.expanded = 0
+      this.activeLists = []
     }
   }
 }
 </script>
-<style scoped lang="scss">
-  .timeline-mobile {
-    margin-left: -28px;
-  }
-  .toolbar-mobile {
-    margin-left: -8px;
-  }
-</style>
