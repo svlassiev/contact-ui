@@ -47,7 +47,7 @@
 <script>
 import axios from 'axios'
 import { ObserveVisibility } from 'vue-observe-visibility'
-const apiUrl = 'http://serg.vlassiev.info/hiking-api/'
+const apiUrl = 'https://serg.vlassiev.info/hiking-api/'
 
 export default {
     name: "ImageListTimelineItems",
