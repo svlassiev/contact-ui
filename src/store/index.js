@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import 'es6-promise/auto'
 import axios from 'axios'
 
 Vue.use(Vuex);
