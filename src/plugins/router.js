@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import App from '../App.vue'
+import Timeline from '../components/HikingTimeline'
+import Login from '../components/Login'
 
 Vue.use(Router);
 
@@ -10,12 +11,17 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'app',
-      component: App
+      name: 'timeline',
+      component: Timeline
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '*',
-      redirect: { name: 'app' }
+      redirect: { name: 'timeline' }
     }
   ]
 });
