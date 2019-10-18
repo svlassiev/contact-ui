@@ -14,7 +14,7 @@
             </v-layout>
         </v-timeline-item>
         <v-slide-y-transition v-if="active">
-            <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"/>
+            <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
             <v-flex v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
                 <div
                     v-for="imagesWithinDate in imagesByDate"
