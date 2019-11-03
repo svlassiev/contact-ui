@@ -5,10 +5,13 @@
                 <v-icon>mdi-transfer-up</v-icon>
             </v-app-bar-nav-icon>
             <v-toolbar-title class="headline text-uppercase">
-                Поход
+                Поход - редактирование
             </v-toolbar-title>
             <v-spacer/>
-            <v-app-bar-nav-icon @click="onCollapseClick" v-if="activeLists">
+            <v-app-bar-nav-icon @click="onExitClick">
+                <v-icon>mdi-exit-run</v-icon>
+            </v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click="onCollapseClick">
                 <v-icon>mdi-arrow-collapse-vertical</v-icon>
             </v-app-bar-nav-icon>
         </v-app-bar>
@@ -26,7 +29,7 @@
                             class="mb-4"
                     >
                         <v-item v-slot:default="{ active, toggle }" :value="imagesList.listId">
-                            <image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle" />
+                            <edit-image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle" />
                         </v-item>
                     </div>
                 </v-item-group>
@@ -36,17 +39,19 @@
 </template>
 
 <script>
-    import ImageListTimelineItems from "./ImageListTimelineItems";
+    import firebase from 'firebase'
+    import EditImageListTimelineItems from "./EditImageListTimelineItems";
+
     export default {
         name: 'HikingTimeline',
-        components: {ImageListTimelineItems},
+        components: {EditImageListTimelineItems},
         data () {
             return {
                 activeLists: []
             }
         },
         mounted () {
-            this.$store.dispatch('loadTimeline')
+            this.$store.dispatch('loadEditPage')
         },
         computed: {
             loading () {
@@ -59,6 +64,9 @@
         methods: {
             onCollapseClick () {
                 this.activeLists = []
+            },
+            onExitClick () {
+                firebase.auth().signOut().then(() => this.$router.replace('timeline'))
             }
         }
     }
