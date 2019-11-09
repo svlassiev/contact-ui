@@ -37,6 +37,11 @@
                     </div>
                 </v-item-group>
             </v-timeline>
+            <v-snackbar v-model="errorSnackbar" :timeout="6000">
+                <v-layout>
+                    {{ errorSnackbar }}
+                </v-layout>
+            </v-snackbar>
         </v-content>
     </div>
 </template>
@@ -68,6 +73,12 @@
             },
             foldersWithImages() {
                 return this.$store.state.folders
+            },
+            errorSnackbar: {
+                get() {
+                    return this.$store.state.updateError
+                },
+                set() {}
             }
         },
         methods: {

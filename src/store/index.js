@@ -8,13 +8,16 @@ const apiUrl = 'https://serg.vlassiev.info/hiking-api/'
 
 export default new Vuex.Store({
     state: {
+        idToken: '',
         folders: [],
         loading: true,
         firebaseConfig: {
             data: null,
             loading: false
         },
-        editForbidden: false
+        editForbidden: false,
+        updating: false,
+        updateError: null
     },
     mutations: {
         LOAD_TIMELINE_SUBMIT (state){
@@ -30,8 +33,9 @@ export default new Vuex.Store({
             state.folders = []
         },
 
-        LOAD_EDIT_SUBMIT (state){
+        LOAD_EDIT_SUBMIT (state, idToken){
             state.loading = true
+            state.idToken = idToken
             state.folders = []
             state.editForbidden = false
         },
@@ -42,8 +46,21 @@ export default new Vuex.Store({
         },
         LOAD_EDIT_ERROR (state){
             state.folders = []
+            state.idToken = ''
             state.loading = false
             state.editForbidden = true
+        },
+
+        UPDATE_LIST_NAME_SUBMIT (state){
+            state.updateError = null
+            state.updating = true
+        },
+        UPDATE_LIST_NAME_SUCCESS (state){
+            state.updating = false
+        },
+        UPDATE_LIST_NAME_ERROR (state, error){
+            state.updateError = error
+            state.updating = false
         }
     },
     actions: {
@@ -53,23 +70,29 @@ export default new Vuex.Store({
                 .then(response => {
                     if(response.status === 200) {
                         commit('LOAD_TIMELINE_SUCCESS', response)
-                    } else {
-                        commit('LOAD_TIMELINE_ERROR')
                     }
                 })
                 .catch(() => commit('LOAD_TIMELINE_ERROR'))
         },
         async loadEditPage({commit}, idToken) {
-            commit('LOAD_EDIT_SUBMIT')
+            commit('LOAD_EDIT_SUBMIT', idToken)
             axios.get(apiUrl + 'edit/data', { params: idToken })
                 .then(response => {
                     if(response.status === 200) {
                         commit('LOAD_EDIT_SUCCESS', response)
-                    } else {
-                        commit('LOAD_EDIT_ERROR')
                     }
                 })
                 .catch(() => commit('LOAD_EDIT_ERROR'))
+        },
+        async updateListName({commit, state}, { listId, listName }) {
+            commit('UPDATE_LIST_NAME_SUBMIT')
+            axios.put(apiUrl + 'edit/updateListName', { listId, listName }, { params: state.idToken } )
+                .then(response => {
+                    if(response.status === 200) {
+                        commit('UPDATE_LIST_NAME_SUCCESS', response)
+                    }
+                })
+                .catch(error => commit('UPDATE_LIST_NAME_ERROR', error))
         }
     }
 })

@@ -1,17 +1,21 @@
 <template>
     <div>
         <v-timeline-item fill-dot :color="dotColor()" :small="$vuetify.breakpoint.xsOnly">
-            <v-layout align-left>
-                <div>
-                    <v-btn @click="onChevronClick" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
-                        <div class="subtitle-2 text-start">
-                            {{ imagesList.name }}
-                            <v-icon v-if="active" color="black" right large>mdi-chevron-up</v-icon>
-                            <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
-                        </div>
-                    </v-btn>
-                </div>
-            </v-layout>
+            <v-row>
+                <v-col class="py-0">
+                    <v-row class="subtitle-2 text-start pr-2">
+                        <v-col cols="11" class="py-0 pr-0">
+                            <v-text-field v-model="updates.listName" class="py-0" @input="onListNameUpdated"></v-text-field>
+                        </v-col>
+                        <v-col cols="1" class="pa-0">
+                            <v-btn @click="onChevronClick" text width="100%" class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
+                                <v-icon v-if="active" color="black" right large>mdi-chevron-up</v-icon>
+                                <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-col>
+            </v-row>
         </v-timeline-item>
         <v-slide-y-transition v-if="active">
             <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
@@ -47,6 +51,8 @@
 <script>
 import axios from 'axios'
 import { ObserveVisibility } from 'vue-observe-visibility'
+import lodash from 'lodash'
+
 const apiUrl = 'https://serg.vlassiev.info/hiking-api/'
 
 export default {
@@ -71,7 +77,10 @@ export default {
     data () {
         return {
             loading: false,
-            images: []
+            images: [],
+            updates: {
+                listName: this.imagesList.name
+            }
         }
     },
     computed: {
@@ -120,7 +129,10 @@ export default {
             if (visible && this.noImages) {
                 this.loadImages()
             }
-        }
+        },
+        onListNameUpdated: lodash.debounce(function () {
+            this.$store.dispatch('updateListName', { listId: this.imagesList.listId, listName: this.updates.listName })
+        }, 700),
     }
 }
 </script>

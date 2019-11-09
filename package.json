@@ -15,6 +15,7 @@
     "core-js": "^2.6.5",
     "es6-promise": "^4.2.8",
     "firebase": "^7.2.3",
+    "lodash": "^4.17.15",
     "vue": "^2.6.10",
     "vue-moment": "^4.0.0",
     "vue-observe-visibility": "^0.4.4",
