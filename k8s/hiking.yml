@@ -33,7 +33,7 @@ spec:
         - name: svlassiev-dockerhub
       containers:
         - name: hiking
-          image: svlassiev/hiking:19.11.09.1
+          image: svlassiev/hiking:19.11.09.2
           imagePullPolicy: Always
           ports:
             - name: http

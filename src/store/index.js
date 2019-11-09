@@ -61,6 +61,18 @@ export default new Vuex.Store({
         UPDATE_LIST_NAME_ERROR (state, error){
             state.updateError = error
             state.updating = false
+        },
+
+        UPDATE_IMAGE_DESCRIPTION_SUBMIT (state){
+            state.updateError = null
+            state.updating = true
+        },
+        UPDATE_IMAGE_DESCRIPTION_SUCCESS (state){
+            state.updating = false
+        },
+        UPDATE_IMAGE_DESCRIPTION_ERROR (state, error){
+            state.updateError = error
+            state.updating = false
         }
     },
     actions: {
@@ -86,13 +98,23 @@ export default new Vuex.Store({
         },
         async updateListName({commit, state}, { listId, listName }) {
             commit('UPDATE_LIST_NAME_SUBMIT')
-            axios.put(apiUrl + 'edit/updateListName', { listId, listName }, { params: state.idToken } )
+            axios.put(apiUrl + `edit/images-lists/${listId}/name`, { listName }, { params: state.idToken } )
                 .then(response => {
                     if(response.status === 200) {
                         commit('UPDATE_LIST_NAME_SUCCESS', response)
                     }
                 })
                 .catch(error => commit('UPDATE_LIST_NAME_ERROR', error))
+        },
+        async updateImageDescription({commit, state}, { imageId, description }) {
+            commit('UPDATE_IMAGE_DESCRIPTION_SUBMIT')
+            axios.put(apiUrl + `edit/images/${imageId}/description`, { description }, { params: state.idToken } )
+                .then(response => {
+                    if(response.status === 200) {
+                        commit('UPDATE_IMAGE_DESCRIPTION_SUCCESS', response)
+                    }
+                })
+                .catch(error => commit('UPDATE_IMAGE_DESCRIPTION_ERROR', error))
         }
     }
 })

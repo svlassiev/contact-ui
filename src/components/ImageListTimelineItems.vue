@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-timeline-item fill-dot :color="dotColor()" :small="$vuetify.breakpoint.xsOnly">
-            <v-layout align-left>
+            <v-row>
                 <div>
                     <v-btn @click="onChevronClick" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
                         <div class="subtitle-2 text-start">
@@ -11,11 +11,11 @@
                         </div>
                     </v-btn>
                 </div>
-            </v-layout>
+            </v-row>
         </v-timeline-item>
         <v-slide-y-transition v-if="active">
             <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
-            <v-flex v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
+            <v-col v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
                 <div
                     v-for="imagesWithinDate in imagesByDate"
                     :key="imagesWithinDate.date"
@@ -35,11 +35,14 @@
                         <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
-                        <div class="caption">{{ image.timestamp | moment("LT") }}</div>
+                        <v-row>
+                            <v-col cols="2"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
+                            <v-col cols="10"><div class="caption">{{ image.description }}</div></v-col>
+                        </v-row>
                     </v-timeline-item>
                     </div>
                 </div>
-            </v-flex>
+            </v-col>
         </v-slide-y-transition>
     </div>
 </template>

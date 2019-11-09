@@ -19,7 +19,7 @@
         </v-timeline-item>
         <v-slide-y-transition v-if="active">
             <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
-            <v-flex v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
+            <v-col v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
                 <div
                     v-for="imagesWithinDate in imagesByDate"
                     :key="imagesWithinDate.date"
@@ -39,11 +39,18 @@
                         <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
-                        <div class="caption">{{ image.timestamp | moment("LT") }}</div>
+                        <v-row>
+                            <v-col cols="2">
+                                <div class="caption">{{ image.timestamp | moment("LT") }}</div>
+                            </v-col>
+                            <v-col cols="10">
+                                <v-text-field v-model="image.description" class="py-0" @input="onImageDescriptionUpdated(image.imageId, image.description)"></v-text-field>
+                            </v-col>
+                        </v-row>
                     </v-timeline-item>
                     </div>
                 </div>
-            </v-flex>
+            </v-col>
         </v-slide-y-transition>
     </div>
 </template>
@@ -132,6 +139,9 @@ export default {
         },
         onListNameUpdated: lodash.debounce(function () {
             this.$store.dispatch('updateListName', { listId: this.imagesList.listId, listName: this.updates.listName })
+        }, 700),
+        onImageDescriptionUpdated: lodash.debounce(function (imageId, description) {
+            this.$store.dispatch('updateImageDescription', { imageId, description })
         }, 700),
     }
 }
