@@ -32,6 +32,8 @@
                 firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
                     () => {
                         this.error = ''
+                        this.email = ''
+                        this.password = ''
                         this.$router.replace('edit')
                     },
                     (error) => {

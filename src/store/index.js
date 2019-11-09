@@ -13,7 +13,8 @@ export default new Vuex.Store({
         firebaseConfig: {
             data: null,
             loading: false
-        }
+        },
+        editForbidden: false
     },
     mutations: {
         LOAD_TIMELINE_SUBMIT (state){
@@ -32,6 +33,7 @@ export default new Vuex.Store({
         LOAD_EDIT_SUBMIT (state){
             state.loading = true
             state.folders = []
+            state.editForbidden = false
         },
         LOAD_EDIT_SUCCESS (state, response){
             const { data: {imageLists = []} } = response
@@ -41,26 +43,33 @@ export default new Vuex.Store({
         LOAD_EDIT_ERROR (state){
             state.folders = []
             state.loading = false
+            state.editForbidden = true
         }
     },
     actions: {
         async loadTimeline({commit}) {
             commit('LOAD_TIMELINE_SUBMIT')
-            const response = await axios.get(apiUrl + 'folders').catch(() => commit('LOAD_TIMELINE_ERROR'))
-            if(response.status === 200) {
-                commit('LOAD_TIMELINE_SUCCESS', response)
-            } else {
-                commit('LOAD_TIMELINE_ERROR')
-            }
+            axios.get(apiUrl + 'folders')
+                .then(response => {
+                    if(response.status === 200) {
+                        commit('LOAD_TIMELINE_SUCCESS', response)
+                    } else {
+                        commit('LOAD_TIMELINE_ERROR')
+                    }
+                })
+                .catch(() => commit('LOAD_TIMELINE_ERROR'))
         },
-        async loadEditPage({commit}) {
+        async loadEditPage({commit}, idToken) {
             commit('LOAD_EDIT_SUBMIT')
-            const response = await axios.get(apiUrl + 'edit/data').catch(() => commit('LOAD_EDIT_ERROR'))
-            if(response.status === 200) {
-                commit('LOAD_EDIT_SUCCESS', response)
-            } else {
-                commit('LOAD_EDIT_ERROR')
-            }
+            axios.get(apiUrl + 'edit/data', { params: idToken })
+                .then(response => {
+                    if(response.status === 200) {
+                        commit('LOAD_EDIT_SUCCESS', response)
+                    } else {
+                        commit('LOAD_EDIT_ERROR')
+                    }
+                })
+                .catch(() => commit('LOAD_EDIT_ERROR'))
         }
     }
 })

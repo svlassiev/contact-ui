@@ -17,8 +17,11 @@
         </v-app-bar>
 
         <v-content>
-            <v-layout v-if="loading" justify-center class="ma-8">
+            <v-layout v-if="loading" justify-center>
                 <v-progress-circular indeterminate color="blue" size="70"/>
+            </v-layout>
+            <v-layout v-else-if="editForbidden" justify-center class="ma-8">
+                <v-btn text @click="onExitClick">Перейти к просмотру</v-btn>
             </v-layout>
             <v-timeline v-else dense clipped align-top :class="{'ml-n7': $vuetify.breakpoint.xs}">
                 <v-item-group multiple :value="activeLists">
@@ -29,7 +32,7 @@
                             class="mb-4"
                     >
                         <v-item v-slot:default="{ active, toggle }" :value="imagesList.listId">
-                            <edit-image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle" />
+                            <edit-image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle"/>
                         </v-item>
                     </div>
                 </v-item-group>
@@ -45,27 +48,33 @@
     export default {
         name: 'HikingTimeline',
         components: {EditImageListTimelineItems},
-        data () {
+        data() {
             return {
                 activeLists: []
             }
         },
-        mounted () {
-            this.$store.dispatch('loadEditPage')
+        mounted() {
+            firebase.auth().currentUser.getIdToken()
+                .then(idToken => {
+                    this.$store.dispatch('loadEditPage', { idToken })
+                })
         },
         computed: {
-            loading () {
+            loading() {
                 return this.$store.state.loading
             },
-            foldersWithImages () {
+            editForbidden() {
+                return this.$store.state.editForbidden
+            },
+            foldersWithImages() {
                 return this.$store.state.folders
             }
         },
         methods: {
-            onCollapseClick () {
+            onCollapseClick() {
                 this.activeLists = []
             },
-            onExitClick () {
+            onExitClick() {
                 firebase.auth().signOut().then(() => this.$router.replace('timeline'))
             }
         }
