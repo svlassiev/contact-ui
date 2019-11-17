@@ -13,44 +13,74 @@
                                 <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
                             </v-btn>
                         </v-col>
+                        <v-btn fab absolute right small color="error" class="mr-8" @click="removeListConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
                     </v-row>
                 </v-col>
             </v-row>
         </v-timeline-item>
+        <v-dialog v-model="removeListConfirmationDialog" :id="imagesList.listId">
+            <v-card>
+                <v-card-title>
+                    Удалить альбом?
+                </v-card-title>
+                <v-card-text>
+                    Лучше бы не удалять... Точно удаляем?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn text @click="removeListConfirmationDialog = false">Отмена</v-btn>
+                    <v-btn color="error" @click="onListDelete">Удаляем</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-slide-y-transition v-if="active">
-            <div class="loading-placeholder" v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
-            <v-col v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
-                <div
-                    v-for="imagesWithinDate in imagesByDate"
-                    :key="imagesWithinDate.date"
-                    ref="date"
-                    class="mb-4"
-                    :small="$vuetify.breakpoint.xsOnly"
-                >
-                    <v-timeline-item hide-dot>
-                        <div class="subtitle-1">{{ imagesWithinDate.date }}</div>
-                    </v-timeline-item>
+            <div>
+                <v-timeline-item hide-dot>
+                    <v-row class="subtitle-2 text-start pr-2">
+                        <v-col cols="10" class="pa-0">
+                            <v-file-input v-model="imagesToUpload" multiple chips prepend-icon="mdi-image-plus" accept="image/jpeg" full-width></v-file-input>
+                        </v-col>
+                        <v-col cols="2">
+                            <v-btn @click="onAddImage" text width="100%" class="mb-4" :disabled="loading || (imagesToUpload.length < 1)" :loading="loading">
+                                Загрузить
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-timeline-item>
+                <div v-if="noImages || loading" v-observe-visibility="onListVisibilityChange"></div>
+                <v-col v-else class="mb-4" v-observe-visibility="onListVisibilityChange">
                     <div
-                        v-for="image in imagesWithinDate.images"
-                        :key="image.imageId"
-                        ref="image"
-                        class="mb-4">
-                    <v-timeline-item hide-dot class="mb-0 pb-0">
-                        <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
-                    </v-timeline-item>
-                    <v-timeline-item hide-dot class="mt-0 pt-0">
-                        <v-row>
-                            <v-col cols="2">
-                                <div class="caption">{{ image.timestamp | moment("LT") }}</div>
-                            </v-col>
-                            <v-col cols="10">
-                                <v-text-field v-model="image.description" class="py-0" @input="onImageDescriptionUpdated(image.imageId, image.description)"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-timeline-item>
+                        v-for="imagesWithinDate in imagesByDate"
+                        :key="imagesWithinDate.date"
+                        ref="date"
+                        class="mb-4"
+                        :small="$vuetify.breakpoint.xsOnly"
+                    >
+                        <v-timeline-item hide-dot>
+                            <div class="subtitle-1">{{ imagesWithinDate.date }}</div>
+                        </v-timeline-item>
+                        <div
+                            v-for="image in imagesWithinDate.images"
+                            :key="image.imageId"
+                            ref="image"
+                            class="mb-4">
+                        <v-timeline-item hide-dot class="mb-0 pb-0">
+                            <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                        </v-timeline-item>
+                        <v-timeline-item hide-dot class="mt-0 pt-0">
+                            <v-row>
+                                <v-col cols="2">
+                                    <div class="caption">{{ image.timestamp | moment("LT") }}</div>
+                                </v-col>
+                                <v-col cols="10">
+                                    <v-text-field v-model="image.description" class="py-0" @input="onImageDescriptionUpdated(image.imageId, image.description)"></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-timeline-item>
+                        </div>
                     </div>
-                </div>
-            </v-col>
+                </v-col>
+            </div>
         </v-slide-y-transition>
     </div>
 </template>
@@ -87,7 +117,9 @@ export default {
             images: [],
             updates: {
                 listName: this.imagesList.name
-            }
+            },
+            removeListConfirmationDialog: false,
+            imagesToUpload: []
         }
     },
     computed: {
@@ -132,7 +164,7 @@ export default {
         dotColor () {
             return this.colors[Math.floor(Math.random() * this.colors.length)]
         },
-        onListVisibilityChange (visible) {
+        onListVisibilityChange(visible) {
             if (visible && this.noImages) {
                 this.loadImages()
             }
@@ -143,11 +175,14 @@ export default {
         onImageDescriptionUpdated: lodash.debounce(function (imageId, description) {
             this.$store.dispatch('updateImageDescription', { imageId, description })
         }, 700),
+        onListDelete() {
+            this.$store.dispatch('deleteImagesList', this.imagesList.listId)
+            this.removeListConfirmationDialog = false
+        },
+        onAddImage() {
+            this.imagesToUpload.forEach(image => this.$store.dispatch('addImage', { listId: this.imagesList.listId, image } ))
+            this.$nextTick(() => { this.imagesToUpload = [] })
+        }
     }
 }
 </script>
-<style scoped lang="scss">
-    .loading-placeholder {
-        height: 2048px;
-    }
-</style>

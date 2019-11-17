@@ -24,6 +24,15 @@
                 <v-btn text @click="onExitClick">Перейти к просмотру</v-btn>
             </v-layout>
             <v-timeline v-else dense clipped align-top :class="{'ml-n7': $vuetify.breakpoint.xs}">
+                <v-timeline-item fill-dot :small="$vuetify.breakpoint.xsOnly">
+                    <v-row class="subtitle-2 text-start pr-2">
+                        <v-col cols="1" class="pa-0">
+                            <v-btn @click="onAddImagesList" text width="100%" class="mb-4" :disabled="loading" :loading="loading">
+                                <v-icon color="black" left large>mdi-camera-plus-outline</v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-timeline-item>
                 <v-item-group multiple :value="activeLists">
                     <div
                             v-for="imagesList in foldersWithImages"
@@ -48,7 +57,8 @@
 
 <script>
     import firebase from 'firebase'
-    import EditImageListTimelineItems from "./EditImageListTimelineItems";
+    import EditImageListTimelineItems from './EditImageListTimelineItems'
+    import { uuid } from 'uuidv4'
 
     export default {
         name: 'HikingTimeline',
@@ -87,6 +97,11 @@
             },
             onExitClick() {
                 firebase.auth().signOut().then(() => this.$router.replace('timeline'))
+            },
+            onAddImagesList() {
+                const newName = 'Новый альбом ' + this.$moment(new Date()).format('lll')
+                const newImagesList = { listId: uuid(), name: newName, images: [] }
+                this.$store.dispatch('addImagesList', newImagesList)
             }
         }
     }
