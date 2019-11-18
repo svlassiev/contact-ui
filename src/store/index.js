@@ -107,11 +107,9 @@ export default new Vuex.Store({
             state.updating = true
         },
         ADD_IMAGE_SUCCESS (state, image) {
-            console.log('Added image', image)
             state.updating = false
         },
         ADD_IMAGE_ERROR (state, error) {
-            console.log('add image error', error)
             state.updateError = error
             state.updating = false
         },
@@ -121,7 +119,6 @@ export default new Vuex.Store({
             state.updating = true
         },
         DELETE_IMAGE_SUCCESS (state, imageId) {
-            console.log('Deleted image', imageId)
             state.updating = false
         },
         DELETE_IMAGE_ERROR (state, error) {
@@ -183,14 +180,13 @@ export default new Vuex.Store({
             axios.post(apiUrl + `edit/images/signed-url`, listId, {params: state.idToken})
                 .then(response => {
                     const signedUrl = response.data
-                    console.log('signedUrl', signedUrl)
                     const fileReader = new FileReader()
                     fileReader.readAsDataURL(image)
                     fileReader.addEventListener('load', () => {
                         const imageUrl = fileReader.result
-                        axios.put(signedUrl, imageUrl, {headers: { 'Content-Type': 'image/jpeg' }, params: state.idToken})
+                        axios.put(signedUrl, imageUrl, { headers: { 'Content-Type': 'image/jpeg' } })
                             .then((response) => {
-                                console.log('add image after response', response)
+                                console.log('signed url PUT response', response)
                                 axios.post(apiUrl + `edit/images`, {listId, location: signedUrl}, {params: state.idToken})
                                     .then(response => {
                                         commit('ADD_IMAGE_SUCCESS', response.data)
