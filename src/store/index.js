@@ -106,7 +106,14 @@ export default new Vuex.Store({
             state.updateError = null
             state.updating = true
         },
-        ADD_IMAGE_SUCCESS (state, image) {
+        ADD_IMAGE_SUCCESS (state, { listId, image }) {
+            const updatedFolders = state.folders.map(list => {
+                if (list.listId === listId) {
+                    list.images.unshift(image)
+                }
+                return list
+            })
+            state.folders = updatedFolders
             state.updating = false
         },
         ADD_IMAGE_ERROR (state, error) {
@@ -179,20 +186,14 @@ export default new Vuex.Store({
             commit('ADD_IMAGE_SUBMIT')
             axios.post(apiUrl + `edit/images/signed-url`, listId, {params: state.idToken})
                 .then(response => {
-                    const signedUrl = response.data
-                    const fileReader = new FileReader()
-                    fileReader.readAsDataURL(image)
-                    fileReader.addEventListener('load', () => {
-                        const imageUrl = fileReader.result
-                        axios.put(signedUrl, imageUrl, { headers: { 'Content-Type': 'image/jpeg' } })
-                            .then((response) => {
-                                console.log('signed url PUT response', response)
-                                axios.post(apiUrl + `edit/images`, {listId, location: signedUrl}, {params: state.idToken})
-                                    .then(response => {
-                                        commit('ADD_IMAGE_SUCCESS', response.data)
-                                    }).catch(error => commit('ADD_IMAGE_ERROR', error))
-                            }).catch(error => commit('ADD_IMAGE_ERROR', error))
-                    })
+                    const { signedUrl, location } = response.data
+                    axios.put(signedUrl, image, { headers: { 'Content-Type': 'image/jpeg' } })
+                        .then(() => {
+                            axios.post(apiUrl + `edit/images`, {listId, location }, {params: state.idToken})
+                                .then(response => {
+                                    commit('ADD_IMAGE_SUCCESS', { listId, image: response.data })
+                                }).catch(error => commit('ADD_IMAGE_ERROR', error))
+                        }).catch(error => commit('ADD_IMAGE_ERROR', error))
                 }).catch(error => commit('ADD_IMAGE_ERROR', error))
         },
         async deleteImage({commit, state}, imageId) {

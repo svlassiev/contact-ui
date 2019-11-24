@@ -43,7 +43,7 @@
                             <v-file-input v-model="imagesToUpload" multiple chips prepend-icon="mdi-image-plus" accept="image/jpeg" full-width></v-file-input>
                         </v-col>
                         <v-col cols="4">
-                            <v-btn @click="onAddImage" text max-width="100%" class="mb-4" :disabled="loading || (imagesToUpload.length < 1)" :loading="loading">
+                            <v-btn @click="onAddImage" text max-width="100%" class="mb-4" :disabled="imagesToUpload.length < 1" :loading="loading">
                                 Загрузить
                             </v-btn>
                         </v-col>
