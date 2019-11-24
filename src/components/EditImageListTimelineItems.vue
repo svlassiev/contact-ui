@@ -67,7 +67,29 @@
                             ref="image"
                             class="mb-4">
                         <v-timeline-item hide-dot class="mb-0 pb-0">
-                            <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                            <v-row>
+                                <v-col cols="2">
+                                    <v-btn fab left small color="error" class="mr-8" @click="deleteImageConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-col>
+                                <v-col cols="10">
+                                    <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                                </v-col>
+                            </v-row>
+                            <v-dialog v-model="deleteImageConfirmationDialog" :id="image.imageId" max-width="400px">
+                                <v-card>
+                                    <v-card-title>
+                                        Удалить фотографию?
+                                    </v-card-title>
+                                    <v-card-text>
+                                        Точно удаляем?
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer/>
+                                        <v-btn text @click="deleteImageConfirmationDialog = false">Отмена</v-btn>
+                                        <v-btn color="error" @click="onImageDelete(image.imageId)">Удаляем</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
                         </v-timeline-item>
                         <v-timeline-item hide-dot class="mt-0 pt-0">
                             <v-row>
@@ -121,6 +143,7 @@ export default {
                 listName: this.imagesList.name
             },
             removeListConfirmationDialog: false,
+            deleteImageConfirmationDialog: false,
             imagesToUpload: []
         }
     },
@@ -184,6 +207,10 @@ export default {
         onAddImage() {
             this.imagesToUpload.forEach(image => this.$store.dispatch('addImage', { listId: this.imagesList.listId, image } ))
             this.$nextTick(() => { this.imagesToUpload = [] })
+        },
+        onImageDelete(imageId) {
+            this.$store.dispatch('deleteImage', imageId)
+            this.deleteImageConfirmationDialog = false
         }
     }
 }

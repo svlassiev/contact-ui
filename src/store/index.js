@@ -125,7 +125,7 @@ export default new Vuex.Store({
             state.updateError = null
             state.updating = true
         },
-        DELETE_IMAGE_SUCCESS (state, imageId) {
+        DELETE_IMAGE_SUCCESS (state) {
             state.updating = false
         },
         DELETE_IMAGE_ERROR (state, error) {
@@ -200,7 +200,7 @@ export default new Vuex.Store({
             commit('DELETE_IMAGE_SUBMIT')
             axios.delete(apiUrl + `edit/images/${imageId}`, { params: state.idToken } )
                 .then(() => {
-                    commit('DELETE_IMAGE_SUCCESS', imageId)
+                    commit('DELETE_IMAGE_SUCCESS')
                 })
                 .catch(error => commit('DELETE_IMAGE_ERROR', error))
         }
