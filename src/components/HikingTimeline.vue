@@ -13,11 +13,11 @@
             </v-app-bar-nav-icon>
         </v-app-bar>
 
-        <v-content>
+        <v-content :class="{'ml-n7': $vuetify.breakpoint.xs}">
             <v-layout v-if="loading" justify-center class="ma-8">
                 <v-progress-circular indeterminate color="blue" size="70"/>
             </v-layout>
-            <v-timeline v-else dense clipped align-top :class="{'ml-n7': $vuetify.breakpoint.xs}">
+            <v-timeline v-else dense clipped align-top class="timeline">
                 <v-item-group multiple :value="activeLists">
                     <div
                             v-for="imagesList in foldersWithImages"
@@ -63,3 +63,8 @@
         }
     }
 </script>
+<style scoped lang="scss">
+    .timeline {
+        max-width: 100%;
+    }
+</style>

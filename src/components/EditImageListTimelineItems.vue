@@ -4,16 +4,18 @@
             <v-row>
                 <v-col class="py-0">
                     <v-row class="subtitle-2 text-start pr-2">
-                        <v-col cols="11" class="py-0 pr-0">
-                            <v-text-field v-model="updates.listName" class="py-0" @input="onListNameUpdated"></v-text-field>
+                        <v-col cols="10" class="py-0 pr-0">
+                            <v-row>
+                                <v-btn fab left small color="error" class="mr-8" @click="removeListConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
+                                <v-text-field v-model="updates.listName" class="py-0" @input="onListNameUpdated"></v-text-field>
+                            </v-row>
                         </v-col>
-                        <v-col cols="1" class="pa-0">
-                            <v-btn @click="onChevronClick" text width="100%" class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
+                        <v-col cols="2" class="pa-0">
+                            <v-btn @click="onChevronClick" text max-width="100%" class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
                                 <v-icon v-if="active" color="black" right large>mdi-chevron-up</v-icon>
                                 <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
                             </v-btn>
                         </v-col>
-                        <v-btn fab absolute right small color="error" class="mr-8" @click="removeListConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
                     </v-row>
                 </v-col>
             </v-row>
@@ -37,11 +39,11 @@
             <div>
                 <v-timeline-item hide-dot>
                     <v-row class="subtitle-2 text-start pr-2">
-                        <v-col cols="10" class="pa-0">
+                        <v-col cols="8" class="pa-0">
                             <v-file-input v-model="imagesToUpload" multiple chips prepend-icon="mdi-image-plus" accept="image/jpeg" full-width></v-file-input>
                         </v-col>
-                        <v-col cols="2">
-                            <v-btn @click="onAddImage" text width="100%" class="mb-4" :disabled="loading || (imagesToUpload.length < 1)" :loading="loading">
+                        <v-col cols="4">
+                            <v-btn @click="onAddImage" text max-width="100%" class="mb-4" :disabled="loading || (imagesToUpload.length < 1)" :loading="loading">
                                 Загрузить
                             </v-btn>
                         </v-col>
@@ -65,7 +67,7 @@
                             ref="image"
                             class="mb-4">
                         <v-timeline-item hide-dot class="mb-0 pb-0">
-                            <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                            <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                         </v-timeline-item>
                         <v-timeline-item hide-dot class="mt-0 pt-0">
                             <v-row>

@@ -23,7 +23,7 @@
             <v-layout v-else-if="editForbidden" justify-center class="ma-8">
                 <v-btn text @click="onExitClick">Перейти к просмотру</v-btn>
             </v-layout>
-            <v-timeline v-else dense clipped align-top :class="{'ml-n7': $vuetify.breakpoint.xs}">
+            <v-timeline v-else dense clipped align-top class="timeline" :class="{'ml-n7': $vuetify.breakpoint.xs}">
                 <v-timeline-item fill-dot :small="$vuetify.breakpoint.xsOnly">
                     <v-row class="subtitle-2 text-start pr-2">
                         <v-col cols="1" class="pa-0">
@@ -106,3 +106,8 @@
         }
     }
 </script>
+<style scoped lang="scss">
+    .timeline {
+        max-width: 100%;
+    }
+</style>

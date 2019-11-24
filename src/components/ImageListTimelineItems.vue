@@ -32,7 +32,7 @@
                         ref="image"
                         class="mb-4">
                     <v-timeline-item hide-dot class="mb-0 pb-0">
-                        <v-img :src="image.location" :lazy-src="image.thumbnail" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                        <v-img :src="image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
                         <v-row>
