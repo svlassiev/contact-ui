@@ -20,7 +20,7 @@
                 </v-col>
             </v-row>
         </v-timeline-item>
-        <v-dialog v-model="removeListConfirmationDialog" :id="imagesList.listId">
+        <v-dialog v-model="removeListConfirmationDialog" :id="imagesList.listId" max-width="400px">
             <v-card>
                 <v-card-title>
                     Удалить альбом?
