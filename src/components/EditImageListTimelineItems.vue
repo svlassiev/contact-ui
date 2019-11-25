@@ -39,10 +39,10 @@
             <div>
                 <v-timeline-item hide-dot>
                     <v-row class="subtitle-2 text-start pr-2">
-                        <v-col cols="8" class="pa-0">
+                        <v-col cols="9" class="pa-0">
                             <v-file-input v-model="imagesToUpload" multiple chips prepend-icon="mdi-image-plus" accept="image/jpeg" full-width></v-file-input>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="3">
                             <v-btn @click="onAddImage" text max-width="100%" class="mb-4" :disabled="imagesToUpload.length < 1" :loading="loading">
                                 Загрузить
                             </v-btn>
@@ -68,10 +68,10 @@
                             class="mb-4">
                         <v-timeline-item hide-dot class="mb-0 pb-0">
                             <v-row>
-                                <v-col cols="4" sm="2">
+                                <v-col cols="3" sm="2">
                                     <v-btn fab left small color="error" class="mr-8" @click="deleteImageConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-col>
-                                <v-col cols="8" sm="10">
+                                <v-col cols="9" sm="10">
                                     <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                                 </v-col>
                             </v-row>
