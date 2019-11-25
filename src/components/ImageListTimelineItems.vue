@@ -36,8 +36,8 @@
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
                         <v-row>
-                            <v-col cols="2"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
-                            <v-col cols="10"><div class="caption">{{ image.description }}</div></v-col>
+                            <v-col cols="4" sm="2"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
+                            <v-col cols="8" sm="10"><div class="caption">{{ image.description }}</div></v-col>
                         </v-row>
                     </v-timeline-item>
                     </div>
