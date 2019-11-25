@@ -26,7 +26,7 @@
                     Удалить альбом?
                 </v-card-title>
                 <v-card-text>
-                    Лучше бы не удалять... Точно удаляем?
+                    {{ imagesList.name }}. Точно удаляем?
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
@@ -81,7 +81,7 @@
                                         Удалить фотографию?
                                     </v-card-title>
                                     <v-card-text>
-                                        Точно удаляем?
+                                        {{ image.timestamp | moment("LL") }} {{ image.timestamp | moment("LT") }}
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer/>
@@ -209,7 +209,7 @@ export default {
             this.$nextTick(() => { this.imagesToUpload = [] })
         },
         onImageDelete(imageId) {
-            this.$store.dispatch('deleteImage', imageId)
+            this.$store.dispatch('deleteImage', { listId: this.imagesList.listId, imageId } )
             this.deleteImageConfirmationDialog = false
         }
     }

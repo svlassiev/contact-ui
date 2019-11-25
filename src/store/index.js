@@ -17,6 +17,7 @@ export default new Vuex.Store({
         },
         editForbidden: false,
         updating: false,
+        updateMessage: '',
         updateError: null
     },
     mutations: {
@@ -56,6 +57,7 @@ export default new Vuex.Store({
             state.updating = true
         },
         UPDATE_LIST_NAME_SUCCESS (state) {
+            state.updateMessage = 'Images list name is updated'
             state.updating = false
         },
         UPDATE_LIST_NAME_ERROR (state, error) {
@@ -68,6 +70,7 @@ export default new Vuex.Store({
             state.updating = true
         },
         UPDATE_IMAGE_DESCRIPTION_SUCCESS (state) {
+            state.updateMessage = 'Image description is updated'
             state.updating = false
         },
         UPDATE_IMAGE_DESCRIPTION_ERROR (state, error) {
@@ -80,6 +83,7 @@ export default new Vuex.Store({
             state.updating = true
         },
         ADD_IMAGES_LIST_SUCCESS (state, imagesList) {
+            state.updateMessage = `Images list [${imagesList.name}] is created`
             state.folders.unshift(imagesList)
             state.updating = false
         },
@@ -93,6 +97,7 @@ export default new Vuex.Store({
             state.updating = true
         },
         DELETE_IMAGES_LIST_SUCCESS (state, listId) {
+            state.updateMessage = `Images list [${listId}] is deleted`
             const updatedFolders = state.folders.filter(folder => folder.listId !== listId)
             state.folders = updatedFolders
             state.updating = false
@@ -107,6 +112,7 @@ export default new Vuex.Store({
             state.updating = true
         },
         ADD_IMAGE_SUCCESS (state, { listId, image }) {
+            state.updateMessage = `Image is added to list [${listId}]`
             const updatedFolders = state.folders.map(list => {
                 if (list.listId === listId) {
                     list.images.unshift(image)
@@ -125,7 +131,8 @@ export default new Vuex.Store({
             state.updateError = null
             state.updating = true
         },
-        DELETE_IMAGE_SUCCESS (state) {
+        DELETE_IMAGE_SUCCESS (state, { listId, imageId }) {
+            state.updateMessage = `Image [${imageId}] is deleted from list [${listId}]`
             state.updating = false
         },
         DELETE_IMAGE_ERROR (state, error) {
@@ -196,11 +203,11 @@ export default new Vuex.Store({
                         }).catch(error => commit('ADD_IMAGE_ERROR', error))
                 }).catch(error => commit('ADD_IMAGE_ERROR', error))
         },
-        async deleteImage({commit, state}, imageId) {
+        async deleteImage({commit, state}, { listId, imageId }) {
             commit('DELETE_IMAGE_SUBMIT')
-            axios.delete(apiUrl + `edit/images/${imageId}`, { params: state.idToken } )
+            axios.delete(apiUrl + `edit/images-lists/${listId}/images/${imageId}`, { params: state.idToken } )
                 .then(() => {
-                    commit('DELETE_IMAGE_SUCCESS')
+                    commit('DELETE_IMAGE_SUCCESS', { listId, imageId })
                 })
                 .catch(error => commit('DELETE_IMAGE_ERROR', error))
         }

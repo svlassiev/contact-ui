@@ -51,6 +51,11 @@
                     {{ errorSnackbar }}
                 </v-layout>
             </v-snackbar>
+            <v-snackbar v-model="updateSnackbar" :timeout="3000">
+                <v-layout>
+                    {{ updateMessage }}
+                </v-layout>
+            </v-snackbar>
         </v-content>
     </div>
 </template>
@@ -78,6 +83,12 @@
             loading() {
                 return this.$store.state.loading
             },
+            updating() {
+                return this.$store.state.updating
+            },
+            updateMessage() {
+                return this.$store.state.updateMessage
+            },
             editForbidden() {
                 return this.$store.state.editForbidden
             },
@@ -87,6 +98,12 @@
             errorSnackbar: {
                 get() {
                     return this.$store.state.updateError
+                },
+                set() {}
+            },
+            updateSnackbar: {
+                get() {
+                    return this.updating === false && this.updateMessage
                 },
                 set() {}
             }
