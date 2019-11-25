@@ -68,10 +68,10 @@
                             class="mb-4">
                         <v-timeline-item hide-dot class="mb-0 pb-0">
                             <v-row>
-                                <v-col cols="2">
+                                <v-col cols="4" sm="2">
                                     <v-btn fab left small color="error" class="mr-8" @click="deleteImageConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-col>
-                                <v-col cols="10">
+                                <v-col cols="8" sm="10">
                                     <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                                 </v-col>
                             </v-row>
@@ -93,10 +93,10 @@
                         </v-timeline-item>
                         <v-timeline-item hide-dot class="mt-0 pt-0">
                             <v-row>
-                                <v-col cols="2">
+                                <v-col cols="4" sm="2">
                                     <div class="caption">{{ image.timestamp | moment("LT") }}</div>
                                 </v-col>
-                                <v-col cols="10">
+                                <v-col cols="8" sm="10">
                                     <v-text-field v-model="image.description" class="py-0" @input="onImageDescriptionUpdated(image.imageId, image.description)"></v-text-field>
                                 </v-col>
                             </v-row>
