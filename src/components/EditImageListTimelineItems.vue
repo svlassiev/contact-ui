@@ -72,7 +72,7 @@
                                     <v-btn fab left small color="error" class="mr-8" @click="deleteImageConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-col>
                                 <v-col cols="9" sm="10">
-                                    <v-img :src="image.location" :lazy-src="image.thumbnail" ax-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
+                                    <v-img :src="image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                                 </v-col>
                             </v-row>
                             <v-dialog v-model="deleteImageConfirmationDialog" :id="image.imageId" max-width="400px">

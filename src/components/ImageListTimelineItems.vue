@@ -31,13 +31,14 @@
                         :key="image.imageId"
                         ref="image"
                         class="mb-4">
-                    <v-timeline-item hide-dot class="mb-0 pb-0">
+                    <v-timeline-item hide-dot class="mb-0 pb-0" align="center">
                         <v-img :src="image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mt-0 pt-0">
                         <v-row>
-                            <v-col cols="3" sm="2"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
-                            <v-col cols="9" sm="10"><div class="caption">{{ image.description }}</div></v-col>
+                            <v-col cols="4" sm="2"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
+                            <v-col cols="8" align="center"><div class="caption">{{ image.description }}</div></v-col>
+                            <v-col cols="0" sm="2"/>
                         </v-row>
                     </v-timeline-item>
                     </div>
