@@ -69,23 +69,28 @@
                         <v-timeline-item hide-dot class="mb-0 pb-0">
                             <v-row>
                                 <v-col cols="3" sm="2">
-                                    <v-btn fab left small color="error" class="mr-8" @click="deleteImageConfirmationDialog = true"><v-icon>mdi-close</v-icon></v-btn>
+                                    <v-btn :id="image.imageId" fab left small color="error" class="mr-8" @click="updateDeleteImageDialog(image.imageId, true)"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-col>
                                 <v-col cols="9" sm="10">
                                     <v-img :src="image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain class="ml-n7"/>
                                 </v-col>
                             </v-row>
-                            <v-dialog v-model="deleteImageConfirmationDialog" :id="image.imageId" max-width="400px">
+                            <v-dialog v-model="deleteImageConfirmationDialog[image.imageId]" :id="image.imageId" max-width="400px">
                                 <v-card>
                                     <v-card-title>
                                         Удалить фотографию?
                                     </v-card-title>
                                     <v-card-text>
-                                        {{ image.timestamp | moment("LL") }} {{ image.timestamp | moment("LT") }}
+                                        <v-row>
+                                            <v-img :src="image.thumbnail" max-width="80px"/>
+                                        </v-row>
+                                        <v-row>
+                                            {{ image.timestamp | moment("LL") }} {{ image.timestamp | moment("LT") }}
+                                        </v-row>
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer/>
-                                        <v-btn text @click="deleteImageConfirmationDialog = false">Отмена</v-btn>
+                                        <v-btn text @click="updateDeleteImageDialog(image.imageId, false)">Отмена</v-btn>
                                         <v-btn color="error" @click="onImageDelete(image.imageId)">Удаляем</v-btn>
                                     </v-card-actions>
                                 </v-card>
@@ -143,7 +148,7 @@ export default {
                 listName: this.imagesList.name
             },
             removeListConfirmationDialog: false,
-            deleteImageConfirmationDialog: false,
+            deleteImageConfirmationDialog: {},
             imagesToUpload: []
         }
     },
@@ -208,9 +213,14 @@ export default {
             this.imagesToUpload.forEach(image => this.$store.dispatch('addImage', { listId: this.imagesList.listId, image } ))
             this.$nextTick(() => { this.imagesToUpload = [] })
         },
+        updateDeleteImageDialog(imageId, value) {
+            const dialog = {}
+            dialog[imageId] = value
+            this.deleteImageConfirmationDialog = dialog
+        },
         onImageDelete(imageId) {
             this.$store.dispatch('deleteImage', { listId: this.imagesList.listId, imageId } )
-            this.deleteImageConfirmationDialog = false
+            this.updateDeleteImageDialog(imageId, false)
         }
     }
 }
