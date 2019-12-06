@@ -4,7 +4,7 @@
             <v-row>
                 <div>
                     <v-btn @click="onChevronClick" text class="mb-4" ref="chevronButton" :disabled="loading" :loading="loading">
-                        <div class="subtitle-2 text-start">
+                        <div :id="imagesList.name" class="subtitle-2 text-start">
                             {{ imagesList.name }}
                             <v-icon v-if="active" color="black" right large>mdi-chevron-up</v-icon>
                             <v-icon v-else color="black" right large>mdi-chevron-down</v-icon>
