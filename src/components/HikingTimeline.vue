@@ -66,5 +66,6 @@
 <style scoped lang="scss">
     .timeline {
         max-width: 100%;
+        overflow-x: hidden;
     }
 </style>

@@ -1,12 +1,12 @@
 # hiking-ui
 
 ## Updating
-```shell script
-$ docker build -t svlassiev/hiking:<version> .
-$ docker push svlassiev/hiking:<version>
-$ kubectl apply -f k8s/hiking.yml
-```
-
+* Update version in `k8s/hiking.yml`
+* Commit changes
+* Create tag with the same version as in `k8s/hiking.yml`
+* Push changes together with a tag
+* `docker apply -f k8s/hikning.yml`
+* Wait until docker hub builds new image and then new version will start automatically
 ## Project setup
 ```
 npm install
