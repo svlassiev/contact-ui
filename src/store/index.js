@@ -119,7 +119,7 @@ export default new Vuex.Store({
                 }
                 return list
             })
-            state.folders = updatedFolders
+            state =  {...state, folders: updatedFolders }
             state.updating = false
         },
         ADD_IMAGE_ERROR (state, error) {
@@ -133,6 +133,13 @@ export default new Vuex.Store({
         },
         DELETE_IMAGE_SUCCESS (state, { listId, imageId }) {
             state.updateMessage = `Image [${imageId}] is deleted from list [${listId}]`
+            const updatedFolders = state.folders.map(list => {
+                if (list.listId === listId) {
+                    return list.images.filter(image => image.imageId !== imageId)
+                }
+                return list
+            })
+            state =  {...state, folders: updatedFolders }
             state.updating = false
         },
         DELETE_IMAGE_ERROR (state, error) {

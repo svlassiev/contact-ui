@@ -66,6 +66,13 @@
                             :key="image.imageId"
                             ref="image"
                             class="mb-4">
+
+                        <v-timeline-item hide-dot class="mb-0 pb-0">
+                            <v-row>
+                                <v-col cols="4" sm="2" align="left"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
+                                <v-col cols="8" sm="10" align="right"><div class="caption gps">{{ gps(image) }}</div></v-col>
+                            </v-row>
+                        </v-timeline-item>
                         <v-timeline-item hide-dot class="mb-0 pb-0">
                             <v-row>
                                 <v-col cols="3" sm="2">
@@ -98,10 +105,7 @@
                         </v-timeline-item>
                         <v-timeline-item hide-dot class="mt-0 pt-0">
                             <v-row>
-                                <v-col cols="4" sm="2">
-                                    <div class="caption">{{ image.timestamp | moment("LT") }}</div>
-                                </v-col>
-                                <v-col cols="8" sm="10">
+                                <v-col>
                                     <v-text-field v-model="image.description" class="py-0" @input="onImageDescriptionUpdated(image.imageId, image.description)"></v-text-field>
                                 </v-col>
                             </v-row>
@@ -221,7 +225,20 @@ export default {
         onImageDelete(imageId) {
             this.$store.dispatch('deleteImage', { listId: this.imagesList.listId, imageId } )
             this.updateDeleteImageDialog(imageId, false)
+        },
+        gps (image) {
+            if (image.gps) {
+                return image.gps.latitude + ' ' + image.gps.latitudeRef + ', ' + image.gps.longitude + ' ' + image.gps.longitudeRef + ', ' + image.gps.altitude
+            }
+            return ''
         }
     }
 }
 </script>
+<style scoped lang="scss">
+    .gps {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+</style>
