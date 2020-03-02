@@ -35,7 +35,11 @@
                     <v-timeline-item hide-dot class="mb-0 pb-0">
                         <v-row>
                             <v-col cols="4" sm="2" align="left"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
-                            <v-col cols="8" sm="10" align="right"><div class="caption gps">{{ gps(image) }}</div></v-col>
+                            <v-col cols="8" sm="10" align="right">
+                                <div class="caption gps" @click="onMapClick(image)">
+                                    {{ gps(image) }}
+                                </div>
+                            </v-col>
                         </v-row>
                     </v-timeline-item>
                     <v-timeline-item hide-dot class="mb-0 pb-0" align="center">
@@ -133,11 +137,23 @@ export default {
                 this.loadImages()
             }
         },
-        gps (image) {
+        coordinates (image) {
             if (image.gps) {
-                return image.gps.latitude + ' ' + image.gps.latitudeRef + ', ' + image.gps.longitude + ' ' + image.gps.longitudeRef + ', ' + image.gps.altitude
+                return image.gps.latitude + ' ' + image.gps.latitudeRef + ', ' + image.gps.longitude + ' ' + image.gps.longitudeRef
             }
             return ''
+        },
+        gps (image) {
+            if (image.gps) {
+                return  this.coordinates(image) + ', ' + image.gps.altitude
+            }
+            return ''
+        },
+        map (image) {
+            return 'https://yandex.ru/maps/?l=sat&mode=search&text=' + this.coordinates(image)
+        },
+        onMapClick (image) {
+            window.open(this.map(image))
         }
     }
 }
@@ -150,5 +166,7 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        cursor: pointer;
+        text-decoration: underline;
     }
 </style>
