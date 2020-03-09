@@ -34,11 +34,14 @@
 
                     <v-timeline-item hide-dot class="mb-0 pb-0">
                         <v-row>
-                            <v-col cols="4" sm="2" align="left"><div class="caption">{{ image.timestamp | moment("LT") }}</div></v-col>
-                            <v-col cols="8" sm="10" align="right">
-                                <div class="caption gps" @click="onMapClick(image)">
-                                    {{ gps(image) }}
-                                </div>
+                            <v-col align="left">
+                                <span class="caption pr-2">{{ image.timestamp | moment("LT") }}</span>
+                                <v-tooltip v-if="gps(image)" top>
+                                    <template v-slot:activator="{ on }">
+                                        <v-icon v-on="on" small color="black" @click="onMapClick(image)">mdi-map-marker-radius-outline</v-icon>
+                                    </template>
+                                    <span>{{ gps(image) }}</span>
+                                </v-tooltip>
                             </v-col>
                         </v-row>
                     </v-timeline-item>
@@ -167,6 +170,5 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         cursor: pointer;
-        text-decoration: underline;
     }
 </style>
