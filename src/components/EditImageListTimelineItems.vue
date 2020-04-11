@@ -182,7 +182,7 @@ export default {
         loadImages() {
             this.loading = true
             axios
-                .post(apiUrl + 'images', this.imagesList.images)
+                .post(apiUrl + 'images', { imageIds: this.imagesList.images, skip: 0, limit: 1000 })
                 .then(response => {
                     this.images = response.data
                 })
