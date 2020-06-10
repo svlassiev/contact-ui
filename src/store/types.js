@@ -12,4 +12,6 @@ export const ADD_IMAGES_LIST = workflow('ADD_IMAGES_LIST')
 export const DELETE_IMAGES_LIST = workflow('DELETE_IMAGES_LIST')
 export const ADD_IMAGE = workflow('ADD_IMAGE')
 export const DELETE_IMAGE = workflow('DELETE_IMAGE')
-
+export const LOAD_IMAGES = workflow('LOAD_IMAGES')
+export const LOAD_IMAGES_TO_CACHE = workflow('LOAD_IMAGES_TO_CACHE')
+export const INITIALIZE_IMAGES_LIST = workflow('INITIALIZE_IMAGES_LIST')

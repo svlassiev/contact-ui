@@ -73,6 +73,47 @@ export default {
                 commit(types.DELETE_IMAGE.SUCCESS, {listId, imageId})
             })
             .catch(error => commit(types.DELETE_IMAGE.ERROR, error))
+    },
+
+    async initializeImagesList({commit, state}, imagesList) {
+        commit(types.INITIALIZE_IMAGES_LIST.SUBMIT, imagesList.listId)
+        const { listId, loaded = false, images = [], cache = [] } = state.lists.find(list => list.listId === imagesList.listId)
+        if (!loaded && cache.length === 0) {
+            const skip = images.length
+            const limit = 1
+            axios.post(apiUrl + 'images', {imageIds: imagesList.images, skip, limit})
+                .then(response => {
+                    commit(types.INITIALIZE_IMAGES_LIST.SUCCESS, {listId, cache: response.data, limit})
+                })
+                .catch(() => commit(types.INITIALIZE_IMAGES_LIST.ERROR, listId))
+        }
+    },
+
+    async loadMoreImages({commit, dispatch, state}, imagesList) {
+        const { listId, images = [], cache=[] } = state.lists.find(list => list.listId === imagesList.listId)
+        commit(types.LOAD_IMAGES.SUBMIT)
+        if (cache.length > 0) {
+            console.log('load from cache, already exists: ', images.length)
+            commit(types.LOAD_IMAGES.SUCCESS, listId)
+        }
+        console.log('call load to cache')
+        dispatch('loadImagesToCache', imagesList)
+    },
+    async loadImagesToCache({commit, state}, imagesList) {
+        const { listId, loaded = false, loading = false, images = [] } = state.lists.find(list => list.listId === imagesList.listId)
+        if (loaded || loading) {
+            console.log('loaded:', loaded, 'loading:', loading)
+            return
+        }
+        const skip = images.length
+        const limit = 5
+        commit(types.LOAD_IMAGES_TO_CACHE.SUBMIT, listId)
+        console.log('load to cache, already exists: ', images.length)
+        axios.post(apiUrl + 'images', {imageIds: imagesList.images, skip, limit})
+            .then(response => {
+                commit(types.LOAD_IMAGES_TO_CACHE.SUCCESS, {listId, images: response.data, limit})
+            })
+            .catch(() => commit(types.LOAD_IMAGES_TO_CACHE.ERROR, listId))
     }
 }
 

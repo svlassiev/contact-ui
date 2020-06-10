@@ -125,5 +125,90 @@ export default {
     [types.DELETE_IMAGE.ERROR] (state, error) {
         state.updateError = error
         state.updating = false
+    },
+
+    [types.INITIALIZE_IMAGES_LIST.SUBMIT] (state, listId) {
+        let lists = state.lists
+        if (lists.includes(list => list.listId === listId)) {
+            lists = state.lists.map(list => {
+                if (list.listId === listId) {
+                    list.loading = true
+                }
+                return list
+            })
+        } else {
+            lists.push({listId, loaded: false, loading: true, images: []})
+        }
+        state = {...state, lists}
+    },
+    [types.INITIALIZE_IMAGES_LIST.SUCCESS] (state, {listId, cache, limit}) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.loading = false
+                const imagesLimit = cache.length > limit ? limit : cache.length
+                const images = cache.slice(0, imagesLimit)
+                const initialCache = cache.slice(imagesLimit)
+                list.images = images
+                list.cache = initialCache
+                list.loaded = imagesLimit < limit
+            }
+            return list
+        })
+        console.log('Images list is initialized')
+        state = {...state, lists: updatedLists}
+    },
+    [types.INITIALIZE_IMAGES_LIST.ERROR] (state, listId) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.loading = false
+            }
+            return list
+        })
+        state = {...state, lists: updatedLists}
+    },
+
+    [types.LOAD_IMAGES.SUBMIT] () {},
+    [types.LOAD_IMAGES.SUCCESS] (state, listId) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.images = list.images.concat(list.cache)
+                list.cache = []
+            }
+            return list
+        })
+        state = {...state, lists: updatedLists}
+    },
+    [types.LOAD_IMAGES.ERROR] () {},
+
+    [types.LOAD_IMAGES_TO_CACHE.SUBMIT] (state, listId) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.loading = true
+                list.cache = []
+            }
+            return list
+        })
+        state = {...state, lists: updatedLists}
+    },
+    [types.LOAD_IMAGES_TO_CACHE.SUCCESS] (state, {listId, images, limit}) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.cache = images
+                list.loading = false
+                list.loaded = images.length < limit
+            }
+            return list
+        })
+        state = {...state, lists: updatedLists}
+        console.log('cache loaded', state.lists)
+    },
+    [types.LOAD_IMAGES_TO_CACHE.ERROR] (state, listId) {
+        const updatedLists = state.lists.map(list => {
+            if (list.listId === listId) {
+                list.loading = false
+            }
+            return list
+        })
+        state = {...state, lists: updatedLists}
     }
 }

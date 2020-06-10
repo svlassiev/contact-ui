@@ -17,7 +17,8 @@ export default new Vuex.Store({
         editForbidden: false,
         updating: false,
         updateMessage: '',
-        updateError: null
+        updateError: null,
+        lists: []
     },
     mutations,
     actions

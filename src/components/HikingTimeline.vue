@@ -26,7 +26,7 @@
                             class="mb-4"
                     >
                         <v-item v-slot:default="{ active, toggle }" :value="imagesList.listId">
-                            <image-list-timeline-items :imagesList="imagesList" :active="active" :toggle="toggle" />
+                            <list-timeline :imagesList="imagesList" :active="active" :toggle="toggle" />
                         </v-item>
                     </div>
                 </v-item-group>
@@ -36,10 +36,10 @@
 </template>
 
 <script>
-    import ImageListTimelineItems from "./ImageListTimelineItems";
+    import ListTimeline from "./ListTimeline";
     export default {
         name: 'HikingTimeline',
-        components: {ImageListTimelineItems},
+        components: {ListTimeline},
         data () {
             return {
                 activeLists: []
