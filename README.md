@@ -5,7 +5,7 @@
 * Commit changes
 * Create tag with the same version as in `k8s/hiking.yml`
 * Push changes together with a tag
-* `docker apply -f k8s/hikning.yml`
+* `kubectl apply -f k8s/hiking.yml`
 * Wait until docker hub builds new image and then new version will start automatically
 ## Project setup
 ```
