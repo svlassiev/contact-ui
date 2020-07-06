@@ -8,6 +8,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         idToken: '',
+        timelineEntries: [],
+        images: [],
+        loadingImages: false,
         folders: [],
         loading: true,
         firebaseConfig: {

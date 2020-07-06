@@ -4,6 +4,30 @@ import * as types from './types'
 const apiUrl = 'https://serg.vlassiev.info/hiking-api/'
 
 export default {
+    async loadSimpleTimeline({commit, dispatch}) {
+        commit(types.LOAD_SIMPLE_TIMELINE.SUBMIT)
+        axios.get(apiUrl + 'timeline/data')
+            .then(response => {
+                commit(types.LOAD_SIMPLE_TIMELINE.SUCCESS, response)
+                dispatch('loadImages')
+
+            })
+            .catch(() => commit(types.LOAD_SIMPLE_TIMELINE.ERROR))
+    },
+    async loadImages({state, commit}) {
+        if (state.loading || state.loaded || state.loadingImages) {
+            return
+        }
+        commit(types.LOAD_IMAGES_FLAT.SUBMIT)
+        const alreadyLoaded = state.images.length
+        const limit = 3
+        const imageIds = state.timelineEntries.filter(entry => entry.imageId).map(entry => entry.imageId).slice(alreadyLoaded, alreadyLoaded + limit)
+        axios.post(apiUrl + 'images', {imageIds, skip: 0, limit})
+          .then(response => {
+              commit(types.LOAD_IMAGES_FLAT.SUCCESS, {images: response.data, limit})
+          })
+          .catch(() => commit(types.LOAD_IMAGES_FLAT.ERROR))
+    },
     async loadTimeline({commit}) {
         commit(types.LOAD_TIMELINE.SUBMIT)
         axios.get(apiUrl + 'folders')

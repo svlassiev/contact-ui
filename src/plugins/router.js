@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Timeline from '../components/HikingTimeline'
+import SimpleTimeline from '../components/SimpleTimeline'
 import Login from '../components/Login'
 import Edit from '../components/Edit'
 import firebase from "firebase"
@@ -15,6 +16,11 @@ const router = new Router({
       path: '/',
       name: 'timeline',
       component: Timeline
+    },
+    {
+      path: '/simple',
+      name: 'simple',
+      component: SimpleTimeline
     },
     {
       path: '/login',

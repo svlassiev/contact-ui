@@ -1,6 +1,31 @@
 import * as types from './types'
 
 export default {
+    [types.LOAD_SIMPLE_TIMELINE.SUBMIT] (state) {
+        state.loading = true
+        state.timelineEntries = []
+    },
+    [types.LOAD_SIMPLE_TIMELINE.SUCCESS] (state, response) {
+        state.loading = false
+        state.timelineEntries = response.data
+    },
+    [types.LOAD_SIMPLE_TIMELINE.ERROR] (state) {
+        state.loading = false
+        state.timelineEntries = []
+    },
+
+    [types.LOAD_IMAGES_FLAT.SUBMIT] (state) {
+        state.loadingImages = true
+    },
+    [types.LOAD_IMAGES_FLAT.SUCCESS] (state, {images, limit}) {
+        images.forEach(image => state.images.push(image))
+        state.loaded = images.length < limit
+        state.loadingImages = false
+    },
+    [types.LOAD_IMAGES_FLAT.ERROR] (state) {
+        state.loadingImages = false
+    },
+
     [types.LOAD_TIMELINE.SUBMIT] (state) {
         state.loading = true
         state.folders = []
@@ -154,7 +179,6 @@ export default {
             }
             return list
         })
-        console.log('Images list is initialized')
         state = {...state, lists: updatedLists}
     },
     [types.INITIALIZE_IMAGES_LIST.ERROR] (state, listId) {
@@ -200,7 +224,6 @@ export default {
             return list
         })
         state = {...state, lists: updatedLists}
-        console.log('cache loaded', state.lists)
     },
     [types.LOAD_IMAGES_TO_CACHE.ERROR] (state, listId) {
         const updatedLists = state.lists.map(list => {
