@@ -13,12 +13,12 @@ const router = new Router({
   base: '/hiking',
   routes: [
     {
-      path: '/',
+      path: '/timeline',
       name: 'timeline',
       component: Timeline
     },
     {
-      path: '/simple',
+      path: '/',
       name: 'simple',
       component: SimpleTimeline
     },
@@ -37,7 +37,7 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: { name: 'timeline' }
+      redirect: { name: 'simple' }
     }
   ]
 });
