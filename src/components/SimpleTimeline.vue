@@ -11,9 +11,9 @@
         </v-app-bar>
 
         <v-content :class="{'ml-n7': $vuetify.breakpoint.xs}">
-            <v-row v-if="loading" justify-center class="ma-8">
-                <v-col>
-                    <v-progress-circular indeterminate color="blue" size="70"/>
+            <v-row v-if="loading" justify-center class="ma-4" :class="{'ml-6': $vuetify.breakpoint.xs}">
+                <v-col align="start">
+                    <v-progress-circular indeterminate :color="dotColor()" :size="$vuetify.breakpoint.xsOnly ? '26' : '42'"/>
                 </v-col>
             </v-row>
             <v-timeline v-else dense clipped align-top class="timeline">
@@ -31,10 +31,18 @@
                         </div>
                     </v-timeline-item>
 
+                    <v-timeline-item v-if="entry.date" hide-dot>
+                        <div class="subtitle-1">{{ $moment(entry.date).format("LL") }}</div>
+                    </v-timeline-item>
+
                     <image-item v-else-if="image(entry.imageId)" :image="image(entry.imageId)" />
 
                     <v-timeline-item v-else-if="entry.imageId" hide-dot :small="$vuetify.breakpoint.xsOnly" class="loading-placeholder" v-observe-visibility="onImageVisibilityChange">
-                        <v-progress-linear indeterminate :color="dotColor()"/>
+                        <v-row>
+                            <v-col align="center">
+                                <v-progress-linear :color="dotColor()" class="image-loader"/>
+                            </v-col>
+                        </v-row>
                     </v-timeline-item>
                 </div>
 
@@ -100,5 +108,9 @@ import {ObserveVisibility} from 'vue-observe-visibility'
 
     .loading-placeholder {
         height: 200px;
+    }
+
+    .image-loader {
+        max-width: 200px;
     }
 </style>
