@@ -14,8 +14,8 @@
       </v-row>
     </v-timeline-item>
     <v-timeline-item hide-dot class="mb-0 pb-0" align="center">
-      <v-img :src="image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600" contain
-             class="ml-n7"/>
+      <v-img :src="$vuetify.breakpoint.xs ? location1024 : image.location" :lazy-src="image.thumbnail" max-width="max-content" :max-height="$vuetify.breakpoint.xs ? 300 : 600"
+             contain class="ml-n7"/>
     </v-timeline-item>
     <v-timeline-item hide-dot class="mt-0 py-0">
       <v-row>
@@ -52,6 +52,15 @@ export default {
     },
     map() {
       return 'https://yandex.ru/maps/?l=sat&mode=search&text=' + this.coordinates
+    },
+    location1024() {
+      if (this.image.variants) {
+        const v1024 = this.image.variants.find(v => v.name == 'V1024')
+        if (v1024) {
+          return v1024.location
+        }
+      }
+      return this.image.location
     }
   },
   methods: {

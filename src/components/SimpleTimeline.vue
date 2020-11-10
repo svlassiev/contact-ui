@@ -19,7 +19,7 @@
             <v-timeline v-else dense clipped align-top class="timeline">
                 <div
                     v-for="entry in entries"
-                    :key="entry.listId + entry.imageId + entry.title"
+                    :key="entry.listId + entry.imageId + entry.title + entry.date"
                     ref="entry"
                     class="mb-4"
                     :small="$vuetify.breakpoint.xsOnly"
