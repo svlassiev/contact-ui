@@ -6,13 +6,22 @@ const apiUrl = 'https://serg.vlassiev.info/hiking-api/'
 export default {
     async loadSimpleTimeline({commit, dispatch}) {
         commit(types.LOAD_SIMPLE_TIMELINE.SUBMIT)
-        axios.get(apiUrl + 'timeline/data')
+        axios.get(apiUrl + 'timeline/data/head')
             .then(response => {
                 commit(types.LOAD_SIMPLE_TIMELINE.SUCCESS, response)
                 dispatch('loadImages')
+                dispatch('loadSimpleTimelineTail')
 
             })
             .catch(() => commit(types.LOAD_SIMPLE_TIMELINE.ERROR))
+    },
+    async loadSimpleTimelineTail({commit}) {
+        commit(types.LOAD_SIMPLE_TIMELINE_TAIL.SUBMIT)
+        axios.get(apiUrl + 'timeline/data/tail')
+            .then(response => {
+                commit(types.LOAD_SIMPLE_TIMELINE_TAIL.SUCCESS, response)
+            })
+            .catch(() => commit(types.LOAD_SIMPLE_TIMELINE_TAIL.ERROR))
     },
     async loadImages({state, commit}) {
         if (state.loading || state.loaded || state.loadingImages) {
@@ -20,7 +29,7 @@ export default {
         }
         commit(types.LOAD_IMAGES_FLAT.SUBMIT)
         const alreadyLoaded = state.images.length
-        const limit = 3
+        const limit = 5
         const imageIds = state.timelineEntries.filter(entry => entry.imageId).map(entry => entry.imageId).slice(alreadyLoaded, alreadyLoaded + limit)
         axios.post(apiUrl + 'images', {imageIds, skip: 0, limit})
           .then(response => {

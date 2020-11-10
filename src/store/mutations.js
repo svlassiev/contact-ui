@@ -14,6 +14,15 @@ export default {
         state.timelineEntries = []
     },
 
+    [types.LOAD_SIMPLE_TIMELINE_TAIL.SUBMIT] () {
+    },
+    [types.LOAD_SIMPLE_TIMELINE_TAIL.SUCCESS] (state, response) {
+        let timelineEntries = [...state.timelineEntries, ...response.data]
+        state.timelineEntries = timelineEntries
+    },
+    [types.LOAD_SIMPLE_TIMELINE_TAIL.ERROR] () {
+    },
+
     [types.LOAD_IMAGES_FLAT.SUBMIT] (state) {
         state.loadingImages = true
     },

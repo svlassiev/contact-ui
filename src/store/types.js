@@ -5,6 +5,7 @@ const workflow = name => ({
 })
 
 export const LOAD_SIMPLE_TIMELINE = workflow('LOAD_SIMPLE_TIMELINE')
+export const LOAD_SIMPLE_TIMELINE_TAIL = workflow('LOAD_SIMPLE_TIMELINE_TAIL')
 export const LOAD_IMAGES_FLAT = workflow('LOAD_IMAGES_FLAT')
 export const LOAD_TIMELINE = workflow('LOAD_TIMELINE')
 export const LOAD_EDIT = workflow('LOAD_EDIT')
