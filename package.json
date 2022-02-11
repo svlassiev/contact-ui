@@ -14,7 +14,7 @@
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.11",
     "es6-promise": "^4.2.8",
-    "firebase": "^8.0.1",
+    "firebase": "^9.6.6",
     "lodash": "^4.17.21",
     "uuidv4": "^6.2.5",
     "vue": "^2.6.12",
@@ -29,16 +29,16 @@
     "@vue/cli-plugin-eslint": "^4.5.8",
     "@vue/cli-service": "^4.5.8",
     "babel-eslint": "^10.1.0",
-    "eslint": "^5.16.0",
+    "eslint": "^8.8.0",
     "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.1",
     "sass": "^1.29.0",
     "sass-loader": "^7.3.1",
     "vue-cli-plugin-vuetify": "^0.6.3",
     "vue-router": "^3.4.9",
     "vue-template-compiler": "^2.6.12",
     "vuetify-loader": "^1.6.0",
-    "webpack": "^4.44.2"
+    "webpack": "^5.68.0"
   },
   "eslintConfig": {
     "root": true,
